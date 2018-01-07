@@ -1,0 +1,9 @@
+[package]
+name = "ed25519_hd_key"
+version = "0.1.0"
+authors = ["Taras Shchybovyk <tshchybo@gmail.com>"]
+
+[dependencies]
+hmac = "*"
+sha2 = "*"
+sodiumoxide = "*"
