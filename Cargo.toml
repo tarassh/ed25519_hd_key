@@ -7,3 +7,4 @@ authors = ["Taras Shchybovyk <tshchybo@gmail.com>"]
 hmac = "*"
 sha2 = "*"
 sodiumoxide = "*"
+regex = "*"
