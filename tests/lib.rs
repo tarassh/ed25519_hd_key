@@ -4,13 +4,13 @@ use std::collections::BTreeMap;
 use ed25519_hd_key::*;
 
 #[test]
-fn vectors() {
+fn test_vectors() {
     let test_sets = test_sets();
 
-    let deriviation_path = vec![0, HARDENED_OFFSET + 2147483647, 1, HARDENED_OFFSET + 2147483646, 2];
-    let seed_hex = "fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542";
-    // let deriviation_path = vec![HARDENED_OFFSET + 0, 1, HARDENED_OFFSET + 2, 2, 1000000000];
-    // let seed_hex = "000102030405060708090a0b0c0d0e0f";
+    // let deriviation_path = vec![0, HARDENED_OFFSET + 2147483647, 1, HARDENED_OFFSET + 2147483646, 2];
+    // let seed_hex = "fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542";
+    let deriviation_path = vec![HARDENED_OFFSET + 0, 1, HARDENED_OFFSET + 2, 2, 1000000000];
+    let seed_hex = "000102030405060708090a0b0c0d0e0f";
     let seed = to_byte(seed_hex);
     let (mut private_key, mut chain_code) = get_master_key(&seed);
     let public_key = get_public_key(&private_key);
@@ -46,15 +46,20 @@ fn vectors() {
 
 #[test]
 fn test_derive_from_path() {
-    let seed = to_byte("fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542");
+    let test_sets = test_sets();
+    let seed_hex = "fffcf9f6f3f0edeae7e4e1dedbd8d5d2cfccc9c6c3c0bdbab7b4b1aeaba8a5a29f9c999693908d8a8784817e7b7875726f6c696663605d5a5754514e4b484542";
+
+    let seed = to_byte(seed_hex);
     let path = "m/0'/2147483647'";
 
     let (private_key, chain_code) = derive_from_path(&path, &seed);
     let public_key = get_public_key(&private_key);
 
-    assert_eq!(to_hex_string(&private_key), "ea4f5bfe8694d8bb74b7b59404632fd5968b774ed545e810de9c32a4fb4192f4");
-    assert_eq!(to_hex_string(&chain_code), "138f0b2551bcafeca6ff2aa88ba8ed0ed8de070841f0c4ef0165df8181eaad7f");
-    assert_eq!(to_hex_string(&public_key), "005ba3b9ac6e90e83effcd25ac4e58a1365a9e35a3d3ae5eb07b9e4d90bcf7506d");
+    let chain = &test_sets[seed_hex][path];
+
+    assert_eq!(to_hex_string(&private_key), chain["prv"]);
+    assert_eq!(to_hex_string(&chain_code), chain["chain"]);
+    assert_eq!(to_hex_string(&public_key), chain["pub"]);
 }
 
 
