@@ -33,7 +33,7 @@ pub fn get_public_key(private_key: &[u8]) -> Vec<u8> {
     public_key
 }
 
-pub fn derive(key: &Vec<u8>, chain_code: &Vec<u8>, index: u32) -> (Vec<u8>, Vec<u8>) {
+pub fn derive(key: &[u8], chain_code: &[u8], index: u32) -> (Vec<u8>, Vec<u8>) {
     let index_buffer: [u8; 4] = unsafe { transmute(index.to_be()) };
     let mut data = if index & HARDENED_OFFSET != 0 {
         let mut data = vec![0u8];
