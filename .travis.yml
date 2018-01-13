@@ -1,5 +1,6 @@
 language: rust
 before_install:
+  - sudo add-apt-repository ppa:chris-lea/libsodium
   - sudo apt-get -qq update
   - sudo apt-get -y install libsodium18 libsodium-dev pkg-config
 script:
