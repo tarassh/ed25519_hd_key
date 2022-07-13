@@ -14,10 +14,9 @@ pub const HARDENED_OFFSET: u32 = 0x80000000;
 
 
 pub fn get_master_key(seed: &[u8]) -> (Vec<u8>, Vec<u8>) {
-    let mut hmac = Hmac::<Sha512>::new(ED25519_CURVE.as_bytes()).unwrap();
-    hmac.input(seed);
-    let i = hmac.result().code();
-
+    let mut hmac = Hmac::<Sha512>::new_from_slice(ED25519_CURVE.as_bytes()).unwrap();
+    hmac.update(seed);
+    let i = hmac.finalize().into_bytes();
     let il = i[0..32].to_vec();
     let ir = i[32..].to_vec();
 
@@ -44,9 +43,9 @@ pub fn derive(key: &[u8], chain_code: &[u8], index: u32) -> (Vec<u8>, Vec<u8>) {
     };
     data.extend(&index_buffer);
 
-    let mut hmac = Hmac::<Sha512>::new(&chain_code).unwrap();
-    hmac.input(&data);
-    let i = hmac.result().code();
+    let mut hmac = Hmac::<Sha512>::new_from_slice(&chain_code).unwrap();
+    hmac.update(&data);
+    let i = hmac.finalize().into_bytes();
     let il = i[0..32].to_vec();
     let ir = i[32..].to_vec();
 
